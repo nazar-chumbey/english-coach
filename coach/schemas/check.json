@@ -1,0 +1,49 @@
+{
+ "type": "object",
+ "properties": {
+  "result": {
+   "type": "string",
+   "enum": [
+    "correct",
+    "minor",
+    "wrong"
+   ]
+  },
+  "feedback": {
+   "type": "string"
+  },
+  "corrected": {
+   "type": "string"
+  },
+  "corrections": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "wrong": {
+      "type": "string"
+     },
+     "right": {
+      "type": "string"
+     },
+     "why": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "wrong",
+     "right",
+     "why"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "result",
+  "feedback",
+  "corrected",
+  "corrections"
+ ],
+ "additionalProperties": false
+}

@@ -1,0 +1,158 @@
+{
+ "type": "object",
+ "properties": {
+  "profile": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "role": {
+     "type": "string"
+    },
+    "stack": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "domain": {
+     "type": "string"
+    },
+    "goals": {
+     "type": "string"
+    },
+    "levels": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "notes": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "name",
+    "role",
+    "stack",
+    "domain",
+    "goals",
+    "levels",
+    "notes"
+   ],
+   "additionalProperties": false
+  },
+  "skills": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "grammar",
+       "mistake",
+       "vocab"
+      ]
+     },
+     "title": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "weak",
+       "improving",
+       "stable",
+       "mastered"
+      ]
+     },
+     "understanding": {
+      "type": "string",
+      "enum": [
+       "none",
+       "partial",
+       "solid"
+      ]
+     },
+     "countDelta": {
+      "type": "integer"
+     },
+     "examples": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "wrong": {
+         "type": "string"
+        },
+        "right": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "wrong",
+        "right"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "due": {
+      "type": "string"
+     },
+     "analogy": {
+      "type": "string"
+     },
+     "notes": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "history": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "date": {
+      "type": "string"
+     },
+     "topic": {
+      "type": "string"
+     },
+     "summary": {
+      "type": "string"
+     },
+     "nextFocus": {
+      "type": "string"
+     },
+     "score": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "date",
+     "topic",
+     "summary",
+     "nextFocus",
+     "score"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "profile",
+  "skills",
+  "history"
+ ],
+ "additionalProperties": false
+}

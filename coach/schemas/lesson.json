@@ -1,0 +1,175 @@
+{
+ "type": "object",
+ "properties": {
+  "topic": {
+   "type": "string"
+  },
+  "rationale": {
+   "type": "string"
+  },
+  "focus": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "explanation": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "body": {
+     "type": "string"
+    },
+    "analogy": {
+     "type": "string"
+    },
+    "wrong": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "right": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "title",
+    "body",
+    "analogy",
+    "wrong",
+    "right"
+   ],
+   "additionalProperties": false
+  },
+  "chunks": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "chunk": {
+      "type": "string"
+     },
+     "meaning": {
+      "type": "string"
+     },
+     "example": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "chunk",
+     "meaning",
+     "example"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "items": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "choice",
+       "gap",
+       "fix",
+       "write",
+       "explain",
+       "confidence"
+      ]
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "review",
+       "grammar",
+       "vocabulary",
+       "practice",
+       "situation",
+       "test",
+       "reflection"
+      ]
+     },
+     "prompt": {
+      "type": "string"
+     },
+     "hint": {
+      "type": "string"
+     },
+     "options": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "accept": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "why": {
+      "type": "string"
+     },
+     "skill": {
+      "type": "string"
+     },
+     "facts": {
+      "type": "string"
+     },
+     "model": {
+      "type": "string"
+     },
+     "useChunks": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "chunk": {
+         "type": "string"
+        },
+        "meaning": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "chunk",
+        "meaning"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "required": [
+     "id",
+     "type",
+     "section",
+     "prompt",
+     "why",
+     "skill"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "topic",
+  "rationale",
+  "focus",
+  "explanation",
+  "chunks",
+  "items"
+ ],
+ "additionalProperties": false
+}

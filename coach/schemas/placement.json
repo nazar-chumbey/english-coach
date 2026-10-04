@@ -1,0 +1,70 @@
+{
+ "type": "object",
+ "properties": {
+  "topic": {
+   "type": "string"
+  },
+  "rationale": {
+   "type": "string"
+  },
+  "items": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "choice",
+       "gap",
+       "fix",
+       "write",
+       "explain"
+      ]
+     },
+     "section": {
+      "type": "string",
+      "enum": [
+       "grammar",
+       "vocabulary",
+       "writing",
+       "understanding"
+      ]
+     },
+     "prompt": {
+      "type": "string"
+     },
+     "options": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "hint": {
+      "type": "string"
+     },
+     "skill": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "type",
+     "section",
+     "prompt",
+     "skill"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "topic",
+  "rationale",
+  "items"
+ ],
+ "additionalProperties": false
+}

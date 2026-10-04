@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Coach</title>
+  <link rel="stylesheet" href="/soft.css">
+  <script>
+    const t = localStorage.getItem("theme") || "auto";
+    document.documentElement.dataset.theme = t === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : t;
+  </script>
+</head>
+<body>
+  <div class="appShell">
+    <header class="topBar">
+      <div class="brandMark">COACH</div>
+      <nav class="navTabs" id="navTabs">
+        <a class="navTab" href="#/">Головна</a>
+        <a class="navTab" href="#/level">Рівень</a>
+        <a class="navTab" href="#/history">Історія</a>
+        <a class="navTab" href="#/mistakes">Тренажер</a>
+        <a class="navTab" href="#/words">Словник</a>
+        <a class="navTab" href="#/settings">Налаштування</a>
+      </nav>
+      <div class="themeSwitch" id="themeSwitch">
+        <button class="themeOption" data-theme="light" title="День">☀</button>
+        <button class="themeOption" data-theme="auto" title="Авто">◐</button>
+        <button class="themeOption" data-theme="dark" title="Ніч">☾</button>
+      </div>
+    </header>
+    <main id="view"></main>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

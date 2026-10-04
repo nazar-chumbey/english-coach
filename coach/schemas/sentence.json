@@ -1,0 +1,25 @@
+{
+ "type": "object",
+ "properties": {
+  "result": {
+   "type": "string",
+   "enum": [
+    "correct",
+    "minor",
+    "wrong"
+   ]
+  },
+  "feedback": {
+   "type": "string"
+  },
+  "corrected": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "result",
+  "feedback",
+  "corrected"
+ ],
+ "additionalProperties": false
+}

@@ -1,0 +1,88 @@
+{
+ "type": "object",
+ "properties": {
+  "pattern": {
+   "type": "object",
+   "properties": {
+    "title": {
+     "type": "string"
+    },
+    "parts": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "kind": {
+        "type": "string",
+        "enum": [
+         "slot",
+         "fixed"
+        ]
+       },
+       "text": {
+        "type": "string"
+       },
+       "label": {
+        "type": "string"
+       },
+       "hint": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "kind",
+       "text",
+       "label",
+       "hint"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "title",
+    "parts"
+   ],
+   "additionalProperties": false
+  },
+  "explanation": {
+   "type": "string"
+  },
+  "exercises": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "level": {
+      "type": "integer"
+     },
+     "content": {
+      "type": "string"
+     },
+     "slots": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "answer": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "level",
+     "content",
+     "slots",
+     "answer"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "pattern",
+  "explanation",
+  "exercises"
+ ],
+ "additionalProperties": false
+}

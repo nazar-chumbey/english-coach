@@ -1,0 +1,138 @@
+{
+ "type": "object",
+ "properties": {
+  "overall": {
+   "type": "string"
+  },
+  "summary": {
+   "type": "string"
+  },
+  "confidence": {
+   "type": "string",
+   "enum": [
+    "low",
+    "medium",
+    "high"
+   ]
+  },
+  "dimensions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "level": {
+      "type": "string"
+     },
+     "measured": {
+      "type": "boolean"
+     },
+     "note": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "name",
+     "level",
+     "measured",
+     "note"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "strengths": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "area": {
+      "type": "string"
+     },
+     "text": {
+      "type": "string"
+     },
+     "example": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "area",
+     "text",
+     "example"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "weaknesses": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "area": {
+      "type": "string"
+     },
+     "text": {
+      "type": "string"
+     },
+     "example": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "area",
+     "text",
+     "example"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "toTarget": {
+   "type": "object",
+   "properties": {
+    "summary": {
+     "type": "string"
+    },
+    "eta": {
+     "type": "string"
+    },
+    "steps": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "title",
+       "text"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "summary",
+    "eta",
+    "steps"
+   ],
+   "additionalProperties": false
+  }
+ },
+ "required": [
+  "overall",
+  "summary",
+  "confidence",
+  "dimensions",
+  "strengths",
+  "weaknesses",
+  "toTarget"
+ ],
+ "additionalProperties": false
+}

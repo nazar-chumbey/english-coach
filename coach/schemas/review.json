@@ -1,0 +1,180 @@
+{
+ "type": "object",
+ "properties": {
+  "summary": {
+   "type": "string"
+  },
+  "findings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "area": {
+      "type": "string"
+     },
+     "verdict": {
+      "type": "string",
+      "enum": [
+       "good",
+       "mixed",
+       "weak"
+      ]
+     },
+     "text": {
+      "type": "string"
+     },
+     "example": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "area",
+     "verdict",
+     "text",
+     "example"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "improved": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "corrections": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "wrong": {
+      "type": "string"
+     },
+     "right": {
+      "type": "string"
+     },
+     "why": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "wrong",
+     "right",
+     "why"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "understanding": {
+   "type": "object",
+   "properties": {
+    "quote": {
+     "type": "string"
+    },
+    "comment": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "quote",
+    "comment"
+   ],
+   "additionalProperties": false
+  },
+  "nextLesson": {
+   "type": "string"
+  },
+  "nextFocus": {
+   "type": "string"
+  },
+  "recommendation": {
+   "type": "string"
+  },
+  "skills": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "grammar",
+       "mistake",
+       "vocab"
+      ]
+     },
+     "title": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "weak",
+       "improving",
+       "stable",
+       "mastered"
+      ]
+     },
+     "understanding": {
+      "type": "string",
+      "enum": [
+       "none",
+       "partial",
+       "solid"
+      ]
+     },
+     "countDelta": {
+      "type": "integer"
+     },
+     "examples": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "wrong": {
+         "type": "string"
+        },
+        "right": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "wrong",
+        "right"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "due": {
+      "type": "string"
+     },
+     "analogy": {
+      "type": "string"
+     },
+     "notes": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "summary",
+  "findings",
+  "improved",
+  "corrections",
+  "understanding",
+  "nextLesson",
+  "nextFocus",
+  "recommendation",
+  "skills"
+ ],
+ "additionalProperties": false
+}

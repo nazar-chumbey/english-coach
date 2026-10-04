@@ -1,0 +1,72 @@
+{
+ "type": "object",
+ "properties": {
+  "words": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "word": {
+      "type": "string"
+     },
+     "meaning": {
+      "type": "string"
+     },
+     "ipa": {
+      "type": "string"
+     },
+     "example": {
+      "type": "string"
+     },
+     "association": {
+      "type": "string"
+     },
+     "cloze": {
+      "type": "string"
+     },
+     "clozeAnswer": {
+      "type": "string"
+     },
+     "collocations": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "distractors": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "minItems": 3,
+      "maxItems": 3
+     },
+     "source": {
+      "type": "string",
+      "enum": [
+       "work",
+       "general"
+      ]
+     }
+    },
+    "required": [
+     "word",
+     "meaning",
+     "ipa",
+     "example",
+     "association",
+     "cloze",
+     "clozeAnswer",
+     "collocations",
+     "distractors",
+     "source"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "words"
+ ],
+ "additionalProperties": false
+}
