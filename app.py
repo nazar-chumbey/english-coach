@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import threading
 import time
 import urllib.request
@@ -16,8 +17,7 @@ PORTS = range(8765, 8785)
 IDLE = 180
 HOME = Path.home()
 DATA = HOME / "Library/Application Support" / NAME
-BROWSERS = ("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-            "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge")
+BROWSERS = (Path("/Applications/Google Chrome.app"), Path("/Applications/Microsoft Edge.app"))
 
 
 def load_shell_env() -> None:
@@ -42,9 +42,9 @@ def running(port: int) -> bool:
 
 
 def open_window(url: str) -> None:
-    for path in BROWSERS:
-        if Path(path).is_file():
-            subprocess.Popen([path, f"--app={url}", "--new-window"])
+    for app in BROWSERS:
+        if app.is_dir():
+            subprocess.run(["open", "-na", str(app), "--args", f"--app={url}"], check=False)
             return
     webbrowser.open(url)
 
@@ -53,6 +53,12 @@ def main() -> None:
     port = next((p for p in PORTS if running(p)), None)
     if port:
         return open_window(f"http://localhost:{port}")
+    frozen = getattr(sys, "frozen", False)
+    subprocess.Popen([sys.executable, *([] if frozen else [__file__]), "--serve"], start_new_session=True,
+                     stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def serve() -> None:
     load_shell_env()
     data = Path(os.environ.get("EC_DATA") or DATA)
     for port in PORTS:
@@ -70,4 +76,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    serve() if "--serve" in sys.argv else main()

@@ -1,46 +1,36 @@
 from __future__ import annotations
 
-import struct
-import sys
-import zlib
 from pathlib import Path
 
-TOP, BOTTOM = (0x7F, 0x8C, 0xF5), (0xB0, 0x7C, 0xF0)
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
+
+ROOT = Path(__file__).resolve().parent.parent
+BG, INK = (0xE6, 0xEC, 0xF2), (0x2E, 0x3A, 0x4B)
+FONT = "/System/Library/Fonts/SFNS.ttf"
+WORD, TRACKING = "COACH", 0.4
 
 
-def rounded(x: float, y: float, x0: float, y0: float, x1: float, y1: float, r: float) -> bool:
-    cx, cy = min(max(x, x0 + r), x1 - r), min(max(y, y0 + r), y1 - r)
-    return (x - cx) ** 2 + (y - cy) ** 2 <= r * r
-
-
-def pixel(x: float, y: float) -> tuple[int, int, int, int] | None:
-    if not rounded(x, y, 0.06, 0.06, 0.94, 0.94, 0.2):
-        return None
-    t = (x + y) / 2
-    base = tuple(round(a + (b - a) * t) for a, b in zip(TOP, BOTTOM))
-    bubble = rounded(x, y, 0.2, 0.24, 0.8, 0.66, 0.14)
-    tail = 0.3 <= x <= 0.44 and 0.6 <= y <= 0.78 and y - 0.6 <= (0.44 - x) * 1.3
-    dot = any((x - cx) ** 2 + (y - 0.45) ** 2 <= 0.045 ** 2 for cx in (0.36, 0.5, 0.64))
-    return (*(base if dot or not (bubble or tail) else (255, 255, 255)), 255)
-
-
-def png(size: int) -> bytes:
-    rows = []
-    for j in range(size):
-        row = bytearray(b"\0")
-        for i in range(size):
-            samples = [pixel((i + dx) / size, (j + dy) / size) for dx in (0.25, 0.75) for dy in (0.25, 0.75)]
-            hits = [s for s in samples if s]
-            rgb = [sum(s[k] for s in hits) // len(hits) if hits else 0 for k in range(3)]
-            row += bytes([*rgb, 255 * len(hits) // 4])
-        rows.append(bytes(row))
-    chunk = lambda kind, body: struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body))
-    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", size, size, 8, 6, 0, 0, 0))
-            + chunk(b"IDAT", zlib.compress(b"".join(rows), 9)) + chunk(b"IEND", b""))
+def icon(size: int = 1024) -> Image.Image:
+    box = (100, 100, 924, 924)
+    shadow = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(shadow).rounded_rectangle((box[0], box[1] + 18, box[2], box[3] + 18), 185, fill=90)
+    image = Image.new("RGBA", (size, size), (*INK, 0))
+    image.putalpha(shadow.filter(ImageFilter.GaussianBlur(28)))
+    draw = ImageDraw.Draw(image)
+    draw.rounded_rectangle(box, 185, fill=(*BG, 255))
+    font = ImageFont.truetype(FONT, 118)
+    font.set_variation_by_axes([100, 96, 400, 600])
+    gap = font.size * TRACKING
+    widths = [font.getlength(c) for c in WORD]
+    x = (size - sum(widths) - gap * (len(WORD) - 1)) / 2
+    top, bottom = font.getbbox(WORD)[1], font.getbbox(WORD)[3]
+    for char, width in zip(WORD, widths):
+        draw.text((x, size / 2 - (top + bottom) / 2), char, font=font, fill=(*INK, 255))
+        x += width + gap
+    return image
 
 
 if __name__ == "__main__":
-    root = Path(__file__).resolve().parent.parent
-    for target, size in ((root / "tools/icon.png", 1024), (root / "web/icon.png", 256)):
-        target.write_bytes(png(size))
-        print(target, file=sys.stderr)
+    image = icon()
+    image.save(ROOT / "tools/icon.png")
+    image.resize((256, 256), Image.LANCZOS).save(ROOT / "web/icon.png")
