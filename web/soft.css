@@ -193,3 +193,6 @@ details summary { cursor: pointer; color: var(--muted); font-size: 13px; }
 .drillPieceBank { display: flex; flex-wrap: wrap; gap: 8px; }
 .drillPieceButton { border: 0; cursor: pointer; color: inherit; background: var(--bg); padding: 8px 14px; border-radius: 10px; box-shadow: var(--raise-sm); font: inherit; }
 .installCommandLine { flex: 1; padding: 12px 14px; border-radius: 12px; box-shadow: var(--press); font-family: ui-monospace, monospace; font-size: 13px; overflow-x: auto; white-space: nowrap; }
+.releaseNotesPanel { margin: 4px 0 8px; }
+.releaseNotesPanel summary { cursor: pointer; color: var(--g1); }
+.releaseNotesPanel p { margin: 8px 0 0; }

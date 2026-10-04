@@ -279,11 +279,11 @@ class ServerTest(unittest.TestCase):
             self.assertEqual(r.status, 200)
 
     def test_update_check(self):
-        release = {"tag_name": "v1.2.0", "html_url": "u", "assets": []}
+        release = {"tag_name": "v1.2.0", "body": "- нове", "assets": []}
         with mock.patch("coach.update.latest", return_value=release):
             self.assertEqual(self.call("/api/update")[1], {"current": "dev", "available": False})
             with mock.patch("server.VERSION", "v1.1.9"):
-                self.assertEqual(self.call("/api/update")[1]["available"], True)
+                self.assertEqual((self.call("/api/update")[1]["available"], self.call("/api/update")[1]["notes"]), (True, "- нове"))
             with mock.patch("server.VERSION", "v1.10.0"):
                 self.assertEqual(self.call("/api/update")[1]["available"], False)
         self.assertEqual(self.call("/api/update", {})[0], 400)

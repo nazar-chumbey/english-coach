@@ -12,6 +12,7 @@ jobs:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+      - run: test -s "notes/$GITHUB_REF_NAME.md" || { echo "Write notes/$GITHUB_REF_NAME.md first"; exit 1; }
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -22,3 +23,4 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: EnglishCoach-macOS.zip
+          body_path: notes/${{ github.ref_name }}.md

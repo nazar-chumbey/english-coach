@@ -46,10 +46,11 @@ function updateCard() {
   api.checkUpdate().then((u) => {
     if (!u.available) return;
     const button = h("button.primaryButton", { onclick: install }, "Оновити");
+    const notes = u.notes.trim() ? h("details.releaseNotesPanel", {}, h("summary", {}, "Що нового"),
+      u.notes.trim().split("\n").filter((l) => l.trim()).map((l) => rich("p", l.replace(/^\s*[-*]\s+/, "• ")))) : null;
     const card = h("div.softCard", {}, h("div.sectionLabel", {}, "Оновлення"),
-      h("p", {}, `Доступна версія ${u.latest}, у тебе ${u.current}. Прогрес збережеться.`),
-      h("div.buttonRow", {}, h("a.softButton", { href: u.url, target: "_blank", style: "text-decoration:none" }, "Що нового"),
-        h("div.spacer"), button));
+      h("p", {}, `Доступна версія ${u.latest}, у тебе ${u.current}. Прогрес збережеться.`), notes,
+      h("div.buttonRow", {}, h("div.spacer"), button));
     async function install() {
       button.replaceWith(loading("Завантажую і перезапускаю, до хвилини"));
       try {

@@ -37,4 +37,6 @@ pip install pyinstaller pillow certifi
 python tools/build.py   # dist/English Coach.app
 ```
 
-Pushing a `v*` tag builds the macOS zip and attaches it to a GitHub release.
+Pushing a `v*` tag builds the macOS zip and attaches it to a GitHub release. Write the release notes
+first in `notes/<tag>.md` (Ukrainian, user-facing): the app shows them under **Що нового**, and the
+build fails without them.

@@ -42,7 +42,7 @@ def check(version: str) -> dict:
     if version == "dev":
         return {"current": version, "available": False}
     release = latest()
-    return {"current": version, "latest": release["tag_name"], "url": release["html_url"],
+    return {"current": version, "latest": release["tag_name"], "notes": release.get("body") or "",
             "available": _parse(release["tag_name"]) > _parse(version)}
 
 
