@@ -47,7 +47,7 @@ def _prompt(name: str) -> str:
 
 def ask(prompt: str, payload: dict, schema: str, model: str) -> dict:
     args = [
-        "claude", "-p", "--output-format", "json", "--no-session-persistence",
+        shutil.which("claude") or "claude", "-p", "--output-format", "json", "--no-session-persistence",
         "--tools", "", "--setting-sources", "", "--model", model,
         "--system-prompt", _prompt(prompt),
         "--json-schema", (HERE / "schemas" / f"{schema}.json").read_text("utf-8"),

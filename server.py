@@ -5,6 +5,7 @@ import mimetypes
 import os
 import re
 import sys
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -16,12 +17,18 @@ ROOT = Path(__file__).parent
 WEB = ROOT / "web"
 DEFAULT_VAULT = Path.home() / "Documents/Obsidian/English/IT English Coach"
 LESSON = r"/api/lessons/([\w-]+)"
+ACTIVITY = {"ping": None}
+
+
+def ping() -> dict:
+    ACTIVITY["ping"] = time.time()
+    return {"app": "english-coach"}
 
 
 def make_handler(store: Store):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, fmt, *args):
-            if not self.path.startswith("/api/state"):
+            if not self.path.startswith(("/api/state", "/api/ping")):
                 sys.stderr.write(f"{self.command} {self.path} {args[1] if len(args) > 1 else ''}\n")
 
         def _send(self, code: int, body: bytes, kind: str):
@@ -70,6 +77,7 @@ def make_handler(store: Store):
         def do_GET(self):
             self._route([
                 (r"/api/state", lambda: service.state(store)),
+                (r"/api/ping", ping),
                 (LESSON, lambda i: service.get_lesson(store, i)),
             ])
 

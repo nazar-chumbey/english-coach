@@ -90,5 +90,8 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => appl
 applyTheme(localStorage.getItem("theme") || "auto");
 
 export const rerender = render;
+const ping = () => fetch("/api/ping").catch(() => {});
+ping();
+setInterval(ping, 30000);
 window.addEventListener("hashchange", render);
 render();

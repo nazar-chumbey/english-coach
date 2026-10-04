@@ -28,6 +28,19 @@ function durationPicker(value, onPick) {
   return control;
 }
 
+const INSTALL = "curl -fsSL https://claude.ai/install.sh | bash";
+
+function setupCard() {
+  const copy = h("button.softButton", { onclick: () => navigator.clipboard.writeText(INSTALL).then(() => { copy.textContent = "Скопійовано ✓"; }) }, "Скопіювати");
+  return h("div.softCard", {},
+    h("div.sectionLabel", {}, "Потрібен Claude Code"),
+    h("p", {}, "Уроки й перевірки робить Claude через твій акаунт: підписка Pro, Max, Team чи Enterprise або доступ через Bedrock чи API."),
+    h("p", {}, h("b", {}, "1. "), "Відкрий Terminal і виконай:"),
+    h("div.buttonRow", { style: "margin-top:0" }, h("code.installCommandLine", {}, INSTALL), copy),
+    h("p", {}, h("b", {}, "2. "), "Відкрий новий термінал, запусти ", h("code", {}, "claude"), " і увійди в акаунт."),
+    h("div.buttonRow", {}, h("div.spacer"), h("button.primaryButton", { onclick: () => rerender() }, "Перевірити знову")));
+}
+
 function startCard(app, placement) {
   if (app.pending) return h("div.softCard", {}, h("div.sectionLabel", {}, "Готуємо"), h("div", { style: "margin-top:14px" }, loading(app.pendingMessage)),
     app.error ? h("div.noticeBanner", {}, app.error) : null);
@@ -157,13 +170,13 @@ export default function home(app) {
     return h("section", {},
       h("h1.pageTitle", {}, profile.name ? `Привіт, ${profile.name}` : "Привіт"),
       h("p.pageSubtitle", {}, "IT English, під тебе."),
-      claude.ok ? null : h("div.noticeBanner", {}, claude.message),
+      claude.ok ? null : setupCard(),
       startCard(app, placement));
   }
   return h("section", {},
     h("h1.pageTitle", {}, profile.name ? `Привіт, ${profile.name}` : "Привіт"),
     h("p.pageSubtitle", {}, "IT English, під тебе."),
-    claude.ok ? null : h("div.noticeBanner", {}, claude.message),
+    claude.ok ? null : setupCard(),
     goalCard(app),
     inProgress ? h("div.softCard", {},
       h("div.sectionLabel", {}, "Незавершений урок"),
