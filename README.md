@@ -14,7 +14,8 @@ Your progress stays on your computer.
    right-click it → **Open** → **Open**. Apple Silicon (M1 and newer) only for now.
 
 The app opens in its own Chrome or Edge window (voice input needs one of them, or Safari).
-Closing the window stops it after a couple of minutes.
+Closing the window stops it after a couple of minutes. When a new release is out, the home screen
+shows **Оновити**: the app downloads it, replaces itself and restarts. Your progress is kept.
 
 Progress is stored in `~/Library/Application Support/English Coach`.
 
@@ -32,7 +33,7 @@ python3 -m unittest
 ## Build
 
 ```sh
-pip install pyinstaller pillow
+pip install pyinstaller pillow certifi
 python tools/build.py   # dist/English Coach.app
 ```
 

@@ -267,6 +267,27 @@ class ServerTest(unittest.TestCase):
             server.serve(0, data).server_close()
         self.assertEqual([(w["word"], w["cloze"]) for w in Store(data).read("words", [])], [("Does that make sense", "Ok. ___?")])
 
+    def test_rejects_foreign_host_and_origin(self):
+        port = self.srv.server_address[1]
+        for headers in ({"Host": f"evil.example:{port}"}, {"Origin": "https://evil.example"}):
+            req = urllib.request.Request(self.base + "/api/state", headers=headers)
+            with self.assertRaises(urllib.error.HTTPError) as caught:
+                urllib.request.urlopen(req)
+            self.assertEqual(caught.exception.code, 403)
+        req = urllib.request.Request(self.base + "/api/state", headers={"Origin": f"http://localhost:{port}"})
+        with urllib.request.urlopen(req) as r:
+            self.assertEqual(r.status, 200)
+
+    def test_update_check(self):
+        release = {"tag_name": "v1.2.0", "html_url": "u", "assets": []}
+        with mock.patch("coach.update.latest", return_value=release):
+            self.assertEqual(self.call("/api/update")[1], {"current": "dev", "available": False})
+            with mock.patch("server.VERSION", "v1.1.9"):
+                self.assertEqual(self.call("/api/update")[1]["available"], True)
+            with mock.patch("server.VERSION", "v1.10.0"):
+                self.assertEqual(self.call("/api/update")[1]["available"], False)
+        self.assertEqual(self.call("/api/update", {})[0], 400)
+
     def test_static_index_and_traversal(self):
         with urllib.request.urlopen(self.base + "/") as r:
             self.assertIn(b"<html", r.read())

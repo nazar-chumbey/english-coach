@@ -5,11 +5,13 @@ import mimetypes
 import os
 import re
 import sys
+import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlparse
 
-from coach import service
+from coach import service, update
 from coach.claude import ClaudeError
 from coach.storage import Store
 
@@ -17,12 +19,20 @@ ROOT = Path(__file__).parent
 WEB = ROOT / "web"
 DEFAULT_VAULT = Path.home() / "Documents/Obsidian/English/IT English Coach"
 LESSON = r"/api/lessons/([\w-]+)"
+LOCAL = ("localhost", "127.0.0.1")
+VERSION = update.current(ROOT)
 ACTIVITY = {"ping": None}
 
 
 def ping() -> dict:
     ACTIVITY["ping"] = time.time()
-    return {"app": "english-coach"}
+    return {"app": "english-coach", "version": VERSION}
+
+
+def install_update() -> dict:
+    result = update.install()
+    threading.Timer(1, os._exit, [0]).start()
+    return result
 
 
 def make_handler(store: Store):
@@ -45,7 +55,14 @@ def make_handler(store: Store):
             size = int(self.headers.get("Content-Length") or 0)
             return json.loads(self.rfile.read(size) or b"{}")
 
+        def _local(self) -> bool:
+            origin = self.headers.get("Origin")
+            return (urlparse(f"//{self.headers.get('Host', '')}").hostname in LOCAL
+                    and (not origin or urlparse(origin).hostname in LOCAL))
+
         def _route(self, routes):
+            if not self._local():
+                return self._json(403, {"error": "forbidden"})
             path = self.path.split("?")[0]
             for pattern, fn in routes:
                 match = re.fullmatch(pattern, path)
@@ -78,6 +95,7 @@ def make_handler(store: Store):
             self._route([
                 (r"/api/state", lambda: service.state(store)),
                 (r"/api/ping", ping),
+                (r"/api/update", lambda: update.check(VERSION)),
                 (LESSON, lambda i: service.get_lesson(store, i)),
             ])
 
@@ -101,6 +119,7 @@ def make_handler(store: Store):
                 (r"/api/drills/([\w-]+)/check", lambda i: service.check_drill(store, i, body.get("exercise", {}), body.get("pattern", {}), body.get("text", ""))),
                 (r"/api/drills/([\w-]+)/finish", lambda i: service.finish_drill(store, i, body)),
                 (r"/api/settings", lambda: service.update_settings(store, body)),
+                (r"/api/update", install_update),
                 (r"/api/assessment", lambda: service.assess(store)),
                 (r"/api/onboarding", lambda: service.onboard(store, body)),
                 (r"/api/placement", lambda: service.generate_placement(store)),

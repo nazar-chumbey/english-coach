@@ -44,5 +44,11 @@ export default function settings(app) {
           (v) => save({ defaultMinutes: Number(v) }))),
       TASKS.map(([task, label]) => h("div.formRow", {}, h("span", {}, label),
         select(MODELS, current.models[task], (v) => save({ models: { [task]: v } }))))),
-    saved);
+    saved, version());
+}
+
+function version() {
+  const line = h("p.pageSubtitle", { style: "margin-top:24px" });
+  api.ping().then((p) => { line.textContent = `Версія ${p.version}`; });
+  return line;
 }

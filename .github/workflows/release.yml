@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m unittest
-      - run: pip install pyinstaller pillow
+      - run: pip install pyinstaller pillow certifi
       - run: python tools/build.py
       - run: ditto -c -k --keepParent "dist/English Coach.app" EnglishCoach-macOS.zip
       - uses: softprops/action-gh-release@v2

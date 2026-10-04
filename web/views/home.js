@@ -41,6 +41,31 @@ function setupCard() {
     h("div.buttonRow", {}, h("div.spacer"), h("button.primaryButton", { onclick: () => rerender() }, "Перевірити знову")));
 }
 
+function updateCard() {
+  const slot = h("div");
+  api.checkUpdate().then((u) => {
+    if (!u.available) return;
+    const button = h("button.primaryButton", { onclick: install }, "Оновити");
+    const card = h("div.softCard", {}, h("div.sectionLabel", {}, "Оновлення"),
+      h("p", {}, `Доступна версія ${u.latest}, у тебе ${u.current}. Прогрес збережеться.`),
+      h("div.buttonRow", {}, h("a.softButton", { href: u.url, target: "_blank", style: "text-decoration:none" }, "Що нового"),
+        h("div.spacer"), button));
+    async function install() {
+      button.replaceWith(loading("Завантажую і перезапускаю, до хвилини"));
+      try {
+        await api.installUpdate();
+      } catch (err) {
+        return card.append(h("div.noticeBanner", {}, `Не вдалося оновити: ${err.message}`));
+      }
+      const wait = () => api.checkUpdate().then((v) => (v.current === u.latest ? location.reload() : setTimeout(wait, 2000)))
+        .catch(() => setTimeout(wait, 2000));
+      setTimeout(wait, 3000);
+    }
+    slot.replaceWith(card);
+  }).catch(() => {});
+  return slot;
+}
+
 function startCard(app, placement) {
   if (app.pending) return h("div.softCard", {}, h("div.sectionLabel", {}, "Готуємо"), h("div", { style: "margin-top:14px" }, loading(app.pendingMessage)),
     app.error ? h("div.noticeBanner", {}, app.error) : null);
@@ -177,6 +202,7 @@ export default function home(app) {
     h("h1.pageTitle", {}, profile.name ? `Привіт, ${profile.name}` : "Привіт"),
     h("p.pageSubtitle", {}, "IT English, під тебе."),
     claude.ok ? null : setupCard(),
+    updateCard(),
     goalCard(app),
     inProgress ? h("div.softCard", {},
       h("div.sectionLabel", {}, "Незавершений урок"),

@@ -68,7 +68,8 @@ def serve() -> None:
         except OSError:
             continue
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
-    open_window(f"http://localhost:{port}")
+    if not os.environ.get("EC_NO_WINDOW"):
+        open_window(f"http://localhost:{port}")
     started = time.time()
     while time.time() - (server.ACTIVITY["ping"] or started) < IDLE:
         time.sleep(5)
